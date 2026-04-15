@@ -10,5 +10,6 @@ class QueryView(APIView):
         if not question:
             return Response({"error": "Question is required."}, status=status.HTTP_400_BAD_REQUEST)
 
-        result = query_kvkk(question)
+        history = request.data.get("history", [])
+        result = query_kvkk(question, history=history)
         return Response(result, status=status.HTTP_200_OK)

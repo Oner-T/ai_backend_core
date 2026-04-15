@@ -1,8 +1,41 @@
 import { useState, useRef, useEffect } from 'react'
-import type { KeyboardEvent } from 'react'
+import type { KeyboardEvent, ReactNode } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { sendQuestion } from './api'
-import type { Message, Source } from './types'
+import type { Message, Source, HistoryMessage } from './types'
+
+function renderAnswerWithCitations(text: string, sources: Source[]): ReactNode {
+  const verifiedMaddes = new Set(sources.map((s) => s.madde).filter(Boolean))
+  const parts = text.split(/(Madde\s+\d{1,3})/gi)
+
+  return parts.map((part, i) => {
+    const match = part.match(/^Madde\s+(\d{1,3})$/i)
+    if (!match) return part
+
+    const num = parseInt(match[1])
+    const isVerified = verifiedMaddes.has(num)
+
+    return isVerified ? (
+      <mark
+        key={i}
+        className="bg-blue-100 text-blue-700 rounded px-0.5 not-italic font-medium"
+      >
+        {part}
+      </mark>
+    ) : (
+      <mark
+        key={i}
+        title="Bu madde kaynaklarda doğrulanamadı"
+        className="bg-amber-100 text-amber-700 rounded px-0.5 not-italic font-medium inline-flex items-center gap-0.5"
+      >
+        {part}
+        <svg className="w-3 h-3 shrink-0 inline" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+        </svg>
+      </mark>
+    )
+  })
+}
 
 const SUGGESTIONS = [
   'Kişisel veri nedir?',
@@ -11,18 +44,17 @@ const SUGGESTIONS = [
   'Veri ihlali durumunda ne yapılmalıdır?',
 ]
 
-function uniqueSources(sources: Source[]): Source[] {
-  return [...new Map(sources.map((s) => [`${s.bolum}-${s.madde}`, s])).values()]
-}
 
 export default function App() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
+  const [expandedSource, setExpandedSource] = useState<string | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
   const mutation = useMutation({
-    mutationFn: sendQuestion,
+    mutationFn: ({ question, history }: { question: string; history: HistoryMessage[] }) =>
+      sendQuestion(question, history),
     onSuccess: (data) => {
       setMessages((prev) => [
         ...prev,
@@ -44,9 +76,10 @@ export default function App() {
   function submit(question: string) {
     const q = question.trim()
     if (!q || mutation.isPending) return
+    const history: HistoryMessage[] = messages.map((m) => ({ role: m.role, content: m.text }))
     setMessages((prev) => [...prev, { role: 'user', text: q }])
     setInput('')
-    mutation.mutate(q)
+    mutation.mutate({ question: q, history })
     inputRef.current?.focus()
   }
 
@@ -125,20 +158,62 @@ export default function App() {
                       : 'bg-white text-slate-700 border border-slate-200 shadow-sm rounded-tl-sm'
                   }`}
                 >
-                  {msg.text}
+                  {msg.role === 'assistant' && msg.sources
+                    ? renderAnswerWithCitations(msg.text, msg.sources)
+                    : msg.text}
                 </div>
 
                 {/* Source badges */}
                 {msg.role === 'assistant' && msg.sources && msg.sources.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 px-1">
-                    {uniqueSources(msg.sources).map((s, idx) => (
-                      <span
-                        key={idx}
-                        className="text-xs bg-blue-50 text-blue-600 border border-blue-100 rounded-full px-2.5 py-0.5 font-medium"
-                      >
-                        Bölüm {s.bolum} · Madde {s.madde}
-                      </span>
-                    ))}
+                  <div className="flex flex-col gap-2 px-1">
+                    <div className="flex flex-wrap gap-1.5">
+                      {msg.sources.map((s, idx) => {
+                        const key = `${i}-${idx}`
+                        const isOpen = expandedSource === key
+                        const label = `Bölüm ${s.bolum} · Madde ${s.madde}${s.madde_title ? ` — ${s.madde_title}` : ''}`
+                        return s.is_cross_reference ? (
+                          <button
+                            key={idx}
+                            onClick={() => setExpandedSource(isOpen ? null : key)}
+                            title="Bu madde, birincil sonuçlardan çapraz referans olarak eklendi"
+                            className="text-xs bg-amber-50 text-amber-600 border border-amber-200 rounded-full px-2.5 py-0.5 font-medium flex items-center gap-1 hover:bg-amber-100 transition-colors cursor-pointer"
+                          >
+                            <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                            </svg>
+                            {label}
+                            <svg className={`w-3 h-3 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="m19 9-7 7-7-7" />
+                            </svg>
+                          </button>
+                        ) : (
+                          <button
+                            key={idx}
+                            onClick={() => setExpandedSource(isOpen ? null : key)}
+                            className="text-xs bg-blue-50 text-blue-600 border border-blue-100 rounded-full px-2.5 py-0.5 font-medium flex items-center gap-1 hover:bg-blue-100 transition-colors cursor-pointer"
+                          >
+                            {label}
+                            <svg className={`w-3 h-3 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="m19 9-7 7-7-7" />
+                            </svg>
+                          </button>
+                        )
+                      })}
+                    </div>
+
+                    {/* Expanded snippet panel */}
+                    {msg.sources.map((s, idx) => {
+                      const key = `${i}-${idx}`
+                      if (expandedSource !== key) return null
+                      return (
+                        <div key={idx} className="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 leading-relaxed whitespace-pre-wrap">
+                          <p className="font-semibold text-slate-400 mb-1.5">
+                            Bölüm {s.bolum} · Madde {s.madde}{s.madde_title ? ` — ${s.madde_title}` : ''}
+                          </p>
+                          {s.content}
+                        </div>
+                      )
+                    })}
                   </div>
                 )}
               </div>
