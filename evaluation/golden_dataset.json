@@ -1,0 +1,268 @@
+[
+  {
+    "question": "Kişisel veri nedir?",
+    "expected_answer": "Kimliği belirli veya belirlenebilir gerçek kişiye ilişkin her türlü bilgi kişisel veridir.",
+    "expected_maddes": [3],
+    "expected_bolums": [1],
+    "scenario": "definition"
+  },
+  {
+    "question": "Veri sorumlusu kimdir?",
+    "expected_answer": "Kişisel verilerin işleme amaçlarını ve vasıtalarını belirleyen, veri kayıt sisteminin kurulmasından ve yönetilmesinden sorumlu olan gerçek veya tüzel kişidir.",
+    "expected_maddes": [3],
+    "expected_bolums": [1],
+    "scenario": "definition"
+  },
+  {
+    "question": "Veri işleyen kimdir?",
+    "expected_answer": "Veri sorumlusunun verdiği yetkiye dayanarak onun adına kişisel verileri işleyen gerçek veya tüzel kişidir.",
+    "expected_maddes": [3],
+    "expected_bolums": [1],
+    "scenario": "definition"
+  },
+  {
+    "question": "Açık rıza ne anlama gelir?",
+    "expected_answer": "Açık rıza; belirli bir konuya ilişkin, bilgilendirilmeye dayanan ve özgür iradeyle açıklanan rızadır.",
+    "expected_maddes": [3],
+    "expected_bolums": [1],
+    "scenario": "definition"
+  },
+  {
+    "question": "Kişisel verilerin işlenmesinde hangi genel ilkeler geçerlidir?",
+    "expected_answer": "Kişisel veriler hukuka ve dürüstlük kurallarına uygun, doğru ve güncel, belirli açık ve meşru amaçlar için, amaçla bağlantılı sınırlı ve ölçülü şekilde ve gerektiği kadar süre ile işlenmelidir.",
+    "expected_maddes": [4],
+    "expected_bolums": [2],
+    "scenario": "general_semantic"
+  },
+  {
+    "question": "Madde 5 kapsamında kişisel veri işleme şartları nelerdir?",
+    "expected_answer": "Kişisel veriler ilgili kişinin açık rızası olmaksızın işlenemez. Kanunlarda açıkça öngörülmesi, fiili imkânsızlık, sözleşmenin kurulması veya ifası, hukuki yükümlülük, ilgili kişinin kendisi tarafından alenileştirilmiş olması, bir hakkın tesisi veya korunması ile meşru menfaat hallerinde açık rıza aranmaz.",
+    "expected_maddes": [5],
+    "expected_bolums": [2],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Özel nitelikli kişisel veriler hangileridir ve nasıl işlenebilir?",
+    "expected_answer": "Kişilerin ırkı, etnik kökeni, siyasi düşüncesi, felsefi inancı, dini, sağlığı, cinsel hayatı, ceza mahkûmiyeti ile biyometrik ve genetik verileri özel niteliklidir. Bu veriler ilgilinin açık rızası olmaksızın işlenemez. Sağlık ve cinsel hayata ilişkin veriler ise ancak kamu sağlığı, koruyucu hekimlik gibi amaçlarla sır saklama yükümlülüğü altındaki kişiler tarafından işlenebilir.",
+    "expected_maddes": [6],
+    "expected_bolums": [2],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kişisel veriler yurt dışına ne zaman aktarılabilir?",
+    "expected_answer": "Kişisel veriler yeterli korumayı sağlayan ülkelere aktarılabilir. Yeterli koruma bulunmuyorsa Türkiye'deki ve ilgili yabancı ülkedeki veri sorumlularının yeterli korumayı yazılı olarak taahhüt etmesi ve Kurul izninin bulunması kaydıyla aktarım yapılabilir.",
+    "expected_maddes": [9],
+    "expected_bolums": [2],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Veri sorumlusunun aydınlatma yükümlülüğü nedir?",
+    "expected_answer": "Veri sorumlusu kişisel verilerin elde edilmesi sırasında ilgili kişiyi; veri sorumlusunun kimliği, işleme amacı, kimlere aktarılabileceği, toplama yöntemi ve hukuki sebebi ile ilgili kişinin hakları konusunda aydınlatmak zorundadır.",
+    "expected_maddes": [10],
+    "expected_bolums": [3],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "İlgili kişinin hakları nelerdir?",
+    "expected_answer": "İlgili kişi; kişisel verilerinin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, işlenme amacını öğrenme, yurt içinde veya dışında aktarıldığı üçüncü kişileri bilme, eksik veya yanlış verilerin düzeltilmesini isteme, silinmesini veya yok edilmesini isteme, işlemlerin üçüncü kişilere bildirilmesini isteme, otomatik sistemler vasıtasıyla aleyhine sonuç doğuran kararın itirazı ve zararın giderilmesini talep etme haklarına sahiptir.",
+    "expected_maddes": [11],
+    "expected_bolums": [3],
+    "scenario": "general_semantic"
+  },
+  {
+    "question": "Veri güvenliğine ilişkin yükümlülükler nelerdir?",
+    "expected_answer": "Veri sorumlusu kişisel verilerin hukuka aykırı işlenmesini önlemek, verilere hukuka aykırı erişimi önlemek ve verilerin muhafazasını sağlamak için uygun güvenlik düzeyini temin etmeye yönelik gerekli teknik ve idari tedbirleri almak zorundadır.",
+    "expected_maddes": [12],
+    "expected_bolums": [3],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Veri ihlali durumunda ne yapılmalıdır?",
+    "expected_answer": "Kişisel verilerin kanuni olmayan yollarla başkaları tarafından elde edilmesi hâlinde veri sorumlusu bu durumu en kısa sürede ilgili kişiye ve Kurula bildirmelidir.",
+    "expected_maddes": [12],
+    "expected_bolums": [3],
+    "scenario": "general_semantic"
+  },
+  {
+    "question": "İlgili kişi veri sorumlusuna nasıl başvurabilir?",
+    "expected_answer": "İlgili kişi haklarını kullanmak için veri sorumlusuna yazılı olarak veya Kurulun belirleyeceği diğer yöntemlerle başvurabilir. Veri sorumlusu başvuruyu en geç otuz gün içinde ücretsiz olarak sonuçlandırmak zorundadır.",
+    "expected_maddes": [13],
+    "expected_bolums": [3],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kurula şikâyet hakkı ne zaman kullanılabilir?",
+    "expected_answer": "Veri sorumlusuna başvuru yolunun tüketilmesi şartıyla ilgili kişi Kurula şikâyette bulunabilir. Başvurunun reddi, verilen cevabın yetersiz bulunması veya otuz gün içinde cevap verilmemesi hallerinde şikâyet yoluna başvurulabilir.",
+    "expected_maddes": [14],
+    "expected_bolums": [3],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kurul şikâyet üzerine nasıl bir inceleme yapar?",
+    "expected_answer": "Kurul şikâyet üzerine veya resen inceleme yapabilir. Şikâyet tarihinden itibaren iki yıl içinde karar verilemeyen şikâyetler hakkında dava açılabilir.",
+    "expected_maddes": [15],
+    "expected_bolums": [3],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kişisel verilerin silinmesi ve yok edilmesi nasıl gerçekleşir?",
+    "expected_answer": "İşlenmesini gerektiren sebeplerin ortadan kalkması hâlinde kişisel veriler resen veya ilgili kişinin talebi üzerine veri sorumlusu tarafından silinir, yok edilir veya anonim hâle getirilir.",
+    "expected_maddes": [7],
+    "expected_bolums": [2],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kişisel verilerin işlenmesini gerektiren şartlar ortadan kalktığında ne olur?",
+    "expected_answer": "Kişisel verilerin işlenmesini gerektiren sebeplerin ortadan kalkması hâlinde bu veriler silinir, yok edilir veya anonim hâle getirilir.",
+    "expected_maddes": [7],
+    "expected_bolums": [2],
+    "scenario": "general_semantic"
+  },
+  {
+    "question": "Özel nitelikli kişisel verilerin işlenmesinde açık rıza şartı var mıdır?",
+    "expected_answer": "Evet, özel nitelikli kişisel veriler ilgili kişinin açık rızası olmaksızın işlenemez. Sağlık ve cinsel hayata ilişkin veriler ise yalnızca belirli amaçlarla ve sır saklama yükümlülüğü altındaki kişiler tarafından açık rıza aranmaksızın işlenebilir.",
+    "expected_maddes": [6],
+    "expected_bolums": [2],
+    "scenario": "general_semantic"
+  },
+  {
+    "question": "Kişisel Verileri Koruma Kurumu nasıl oluşur?",
+    "expected_answer": "Kurum; Kurul, Başkanlık ve hizmet birimlerinden oluşur. Kurumun karar organı Kuruldur.",
+    "expected_maddes": [19],
+    "expected_bolums": [4],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kurul kaç üyeden oluşur ve nasıl seçilir?",
+    "expected_answer": "Kurul dokuz üyeden oluşur. Üyelerin yedisi Türkiye Büyük Millet Meclisi tarafından, ikisi Cumhurbaşkanı tarafından seçilir.",
+    "expected_maddes": [20],
+    "expected_bolums": [5],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kurul üyeliğine seçilme şartları nelerdir?",
+    "expected_answer": "Kurula üye seçilebilmek için Türk vatandaşı olmak, en az dört yıllık yükseköğretim mezunu olmak, kamu görevinden çıkarılmamış olmak ve elli yaşını doldurmamış olmak şartları aranır.",
+    "expected_maddes": [21],
+    "expected_bolums": [5],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kurul üyelerinin görev süresi ne kadardır?",
+    "expected_answer": "Kurul üyelerinin görev süresi dört yıldır. Görev süresi dolan üye yeniden seçilebilir.",
+    "expected_maddes": [22],
+    "expected_bolums": [5],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kurulun görev ve yetkileri nelerdir?",
+    "expected_answer": "Kurul; kişisel veri işlenmesine ilişkin ilkeleri belirlemek, şikâyetleri incelemek, veri sorumlularını sicile kaydetmek, yaptırım uygulamak ve uluslararası kuruluşlarla işbirliği yapmak gibi görev ve yetkilere sahiptir.",
+    "expected_maddes": [22],
+    "expected_bolums": [5],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Veri Sorumluları Sicili nedir ve amacı nedir?",
+    "expected_answer": "Başkanlık tarafından kamuya açık olarak tutulacak olan sicildir. Kişisel veri işleyen veri sorumluları bu sicile kaydolmak zorundadır.",
+    "expected_maddes": [16],
+    "expected_bolums": [4],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Veri sorumluları sicile kaydolmak zorunda mıdır?",
+    "expected_answer": "Evet, kişisel veri işlemeden önce Veri Sorumluları Siciline kaydolmak zorunludur. Ancak Kurul, sicile kayıt yükümlülüğüne istisna getirebilir.",
+    "expected_maddes": [16],
+    "expected_bolums": [4],
+    "scenario": "general_semantic"
+  },
+  {
+    "question": "Kişisel verilerin işlenmesi hangi hallerde suç sayılır?",
+    "expected_answer": "Kişisel verilerin kanuna aykırı olarak kaydedilmesi, başkasına verilmesi, yayılması, ele geçirilmesi ve yok edilmemesi Türk Ceza Kanunu kapsamında suç oluşturur.",
+    "expected_maddes": [17],
+    "expected_bolums": [4],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kabahat niteliğindeki eylemler nelerdir ve cezaları nedir?",
+    "expected_answer": "Aydınlatma yükümlülüğünü yerine getirmeyenler, veri güvenliğine ilişkin yükümlülükleri yerine getirmeyenler, Kurul kararlarını uymayanlar ve sicile kayıt yükümlülüğünü yerine getirmeyenler idari para cezasıyla yaptırıma tabi tutulur.",
+    "expected_maddes": [18],
+    "expected_bolums": [4],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kanun hangi verilere uygulanmaz?",
+    "expected_answer": "Kişisel verilerin millî savunma, millî güvenlik, kamu güvenliği, kamu düzeni veya ekonomik güvenlik amacıyla işlenmesi, kişisel verilerin soruşturma, kovuşturma, yargılama veya cezanın infazı ile ilgili olarak yargı makamlarınca işlenmesi ve tamamen kişisel veya ev ile ilgili faaliyetler kapsamında işlenmesi hallerinde bu kanun hükümleri uygulanmaz.",
+    "expected_maddes": [28],
+    "expected_bolums": [6],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "KVKK kapsamı dışındaki istisnalar nelerdir?",
+    "expected_answer": "Millî savunma ve güvenlik, kamu düzeni, suç soruşturması, yargısal faaliyetler ve tamamen kişisel faaliyetler kanunun uygulama alanı dışında bırakılmıştır.",
+    "expected_maddes": [28],
+    "expected_bolums": [6],
+    "scenario": "general_semantic"
+  },
+  {
+    "question": "Kişisel verilerin aktarılması hangi şartlara bağlıdır?",
+    "expected_answer": "Kişisel veriler ilgili kişinin açık rızası olmaksızın aktarılamaz. Kanunda belirtilen işleme şartlarından birinin varlığı hâlinde ilgili kişinin açık rızası aranmaksızın aktarılabilir.",
+    "expected_maddes": [8, 5],
+    "expected_bolums": [2],
+    "scenario": "cross_reference"
+  },
+  {
+    "question": "Özel nitelikli kişisel verilerin aktarım şartları nelerdir?",
+    "expected_answer": "Özel nitelikli kişisel veriler ancak Madde 6'da belirtilen şartların varlığı hâlinde aktarılabilir. Yurt dışına aktarımda ise ayrıca yeterli korumanın bulunması gerekir.",
+    "expected_maddes": [9, 6],
+    "expected_bolums": [2],
+    "scenario": "cross_reference"
+  },
+  {
+    "question": "İlgili kişi zararını nasıl tazmin ettirebilir?",
+    "expected_answer": "İlgili kişi Kurula şikâyette bulunabilir, Kurul ihlal kararı verirse veri sorumlusu zararı tazmin etmek zorundadır. Ayrıca genel hükümler çerçevesinde mahkemeye başvurarak tazminat talep edebilir.",
+    "expected_maddes": [14, 15],
+    "expected_bolums": [3],
+    "scenario": "multi_madde"
+  },
+  {
+    "question": "Veri sorumlusunun tüm yükümlülükleri nelerdir?",
+    "expected_answer": "Veri sorumlusu; aydınlatma yükümlülüğü, veri güvenliği tedbirlerini alma yükümlülüğü, ilgili kişinin başvurularını yanıtlama yükümlülüğü ve Veri Sorumluları Siciline kayıt yükümlülüğünü yerine getirmek zorundadır.",
+    "expected_maddes": [10, 12, 13, 16],
+    "expected_bolums": [3, 4],
+    "scenario": "multi_madde"
+  },
+  {
+    "question": "Kurul üyelerinin tarafsızlık ve bağımsızlık yükümlülükleri nelerdir?",
+    "expected_answer": "Kurul üyeleri görevleri süresince başka bir görev alamaz, ticaret yapamaz ve siyasi faaliyette bulunamaz. Bağımsız ve tarafsız olarak görev yaparlar.",
+    "expected_maddes": [23],
+    "expected_bolums": [5],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kanunun yürürlüğe girişi ve geçiş süreci nasıldır?",
+    "expected_answer": "Kanun yayımı tarihinde yürürlüğe girer. Veri sorumlularına sicile kayıt için geçiş süreleri tanınmıştır.",
+    "expected_maddes": [32],
+    "expected_bolums": [7],
+    "scenario": "specific_madde"
+  },
+  {
+    "question": "Kişisel verilerin korunması hakkı anayasal bir hak mıdır?",
+    "expected_answer": null,
+    "expected_maddes": [],
+    "expected_bolums": [],
+    "scenario": "out_of_scope"
+  },
+  {
+    "question": "GDPR ile KVKK arasındaki farklar nelerdir?",
+    "expected_answer": null,
+    "expected_maddes": [],
+    "expected_bolums": [],
+    "scenario": "out_of_scope"
+  },
+  {
+    "question": "Türk Ceza Kanunu'nda veri ihlalleri için öngörülen hapis cezaları nelerdir?",
+    "expected_answer": null,
+    "expected_maddes": [],
+    "expected_bolums": [],
+    "scenario": "out_of_scope"
+  }
+]

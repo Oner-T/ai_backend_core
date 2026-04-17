@@ -14,7 +14,7 @@ class DocumentChunk(models.Model):
     document_name = models.CharField(max_length=255, default="KVKK.pdf")
     chunk_index = models.IntegerField()
     content = models.TextField()
-    embedding = VectorField(dimensions=384, null=True, blank=True, help_text="The AI mathematical representation of the text")
+    embedding = VectorField(dimensions=1024, null=True, blank=True, help_text="The AI mathematical representation of the text")
 
     def __str__(self):
         return f"{self.section.number if self.section else 'Genel'} - {self.madde} - Row {self.chunk_index}"
