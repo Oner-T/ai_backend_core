@@ -1,0 +1,10 @@
+[
+  {
+    "question": "Kişisel veri nedir?",
+    "expected_answer": "",
+    "scenario": "definition",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 3}
+    ]
+  }
+]

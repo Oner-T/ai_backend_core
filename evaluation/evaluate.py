@@ -29,7 +29,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from datasets import Dataset
 
 # ── Judge model ─────────────────────────────────────────────────────────────
-# Using Claude Haiku as the judge — different from our llama3.2 answering model.
+# Using Claude Haiku as the judge — different from our Gemini answering model.
 # Set ANTHROPIC_API_KEY in your environment before running.
 api_key = os.environ.get("ANTHROPIC_API_KEY")
 if not api_key:

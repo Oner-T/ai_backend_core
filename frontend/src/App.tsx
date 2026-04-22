@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import type { KeyboardEvent, ReactNode } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { sendQuestion } from './api'
+import { sendQuestion, sendFeedback } from './api'
 import type { Message, Source, HistoryMessage } from './types'
 
 function renderAnswerWithCitations(text: string, sources: Source[]): ReactNode {
@@ -49,6 +49,8 @@ export default function App() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [expandedSource, setExpandedSource] = useState<string | null>(null)
+  const [activeModel, setActiveModel] = useState<string | null>(null)
+  const [ratings, setRatings] = useState<Map<number, 'good' | 'bad'>>(new Map())
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -56,6 +58,7 @@ export default function App() {
     mutationFn: ({ question, history }: { question: string; history: HistoryMessage[] }) =>
       sendQuestion(question, history),
     onSuccess: (data) => {
+      setActiveModel(data.model)
       setMessages((prev) => [
         ...prev,
         { role: 'assistant', text: data.answer, sources: data.sources },
@@ -77,7 +80,27 @@ export default function App() {
     setMessages([])
     setExpandedSource(null)
     setInput('')
+    setRatings(new Map())
     inputRef.current?.focus()
+  }
+
+  function rate(assistantIndex: number, rating: 'good' | 'bad') {
+    if (ratings.has(assistantIndex)) return
+    const assistantMsg = messages[assistantIndex]
+    // the user message directly before this assistant message
+    const userMsg = messages[assistantIndex - 1]
+    if (!assistantMsg || !userMsg || userMsg.role !== 'user') return
+
+    setRatings((prev) => new Map(prev).set(assistantIndex, rating))
+    sendFeedback({
+      question: userMsg.text,
+      answer:   assistantMsg.text,
+      sources:  assistantMsg.sources ?? [],
+      rating,
+    }).catch(() => {
+      // silently revert on failure
+      setRatings((prev) => { const m = new Map(prev); m.delete(assistantIndex); return m })
+    })
   }
 
   function submit(question: string) {
@@ -126,7 +149,7 @@ export default function App() {
           )}
           <span className="flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            Ollama · llama3.2
+            {activeModel ?? 'Gemini · 2.5 Flash'}
           </span>
         </div>
       </header>
@@ -191,23 +214,10 @@ export default function App() {
                       {msg.sources.map((s, idx) => {
                         const key = `${i}-${idx}`
                         const isOpen = expandedSource === key
-                        const label = `Bölüm ${s.bolum} · Madde ${s.madde}${s.madde_title ? ` — ${s.madde_title}` : ''}`
-                        return s.is_cross_reference ? (
-                          <button
-                            key={idx}
-                            onClick={() => setExpandedSource(isOpen ? null : key)}
-                            title="Bu madde, birincil sonuçlardan çapraz referans olarak eklendi"
-                            className="text-xs bg-amber-50 text-amber-600 border border-amber-200 rounded-full px-2.5 py-0.5 font-medium flex items-center gap-1 hover:bg-amber-100 transition-colors cursor-pointer"
-                          >
-                            <svg className="w-3 h-3 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
-                            </svg>
-                            {label}
-                            <svg className={`w-3 h-3 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="m19 9-7 7-7-7" />
-                            </svg>
-                          </button>
-                        ) : (
+                        const docPrefix = s.document_name && s.document_name !== 'KVKK'
+                          ? `${s.document_name} · ` : ''
+                        const label = `${docPrefix}Madde ${s.madde}${s.madde_title ? ` — ${s.madde_title}` : ''}`
+                        return (
                           <button
                             key={idx}
                             onClick={() => setExpandedSource(isOpen ? null : key)}
@@ -229,12 +239,44 @@ export default function App() {
                       return (
                         <div key={idx} className="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 leading-relaxed whitespace-pre-wrap">
                           <p className="font-semibold text-slate-400 mb-1.5">
-                            Bölüm {s.bolum} · Madde {s.madde}{s.madde_title ? ` — ${s.madde_title}` : ''}
+                            {s.document_name && `${s.document_name} · `}Madde {s.madde}{s.madde_title ? ` — ${s.madde_title}` : ''}
                           </p>
                           {s.content}
                         </div>
                       )
                     })}
+                  </div>
+                )}
+
+                {/* Feedback buttons */}
+                {msg.role === 'assistant' && (
+                  <div className="flex items-center gap-1 px-1 mt-0.5">
+                    {ratings.get(i) ? (
+                      <span className="text-xs text-slate-400">
+                        {ratings.get(i) === 'good' ? '👍 Teşekkürler!' : '👎 Geri bildirim alındı'}
+                      </span>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => rate(i, 'good')}
+                          title="Yanıt doğru ve yararlı"
+                          className="p-1 rounded text-slate-300 hover:text-emerald-500 hover:bg-emerald-50 transition-colors cursor-pointer"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14Zm-7 13H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h2" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => rate(i, 'bad')}
+                          title="Yanıt yanlış veya eksik"
+                          className="p-1 rounded text-slate-300 hover:text-red-400 hover:bg-red-50 transition-colors cursor-pointer"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10Zm7-13h2a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-2" />
+                          </svg>
+                        </button>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
