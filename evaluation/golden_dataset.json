@@ -1,9 +1,0 @@
-[
-  {
-    "question": "Kişisel veri nedir?",
-    "expected_answer": "Kimliği belirli veya belirlenebilir gerçek kişiye ilişkin her türlü bilgi kişisel veridir.",
-    "expected_maddes": [3],
-    "expected_bolums": [1],
-    "scenario": "definition"
-  }
-]

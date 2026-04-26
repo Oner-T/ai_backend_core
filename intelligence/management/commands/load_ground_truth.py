@@ -80,11 +80,21 @@ class Command(BaseCommand):
                 errors.append(f"  [{i}] missing 'question'")
                 continue
 
-            sources = item.get("expected_sources", [])
-            for src in sources:
-                if "document_name" not in src or "madde" not in src:
-                    errors.append(f"  [{i}] source missing document_name or madde: {src}")
-                    break
+            # Accept both formats:
+            # New:  expected_sources: [{document_name, madde}]
+            # Old:  expected_maddes: [3, 5]  (defaults document_name to "KVKK")
+            if "expected_sources" in item:
+                sources = item["expected_sources"]
+                for src in sources:
+                    if "document_name" not in src or "madde" not in src:
+                        errors.append(f"  [{i}] source missing document_name or madde: {src}")
+                        break
+            else:
+                doc = item.get("document_name", "KVKK")
+                sources = [
+                    {"document_name": doc, "madde": m}
+                    for m in item.get("expected_maddes", [])
+                ]
 
             scenario = item.get("scenario", "user_validated")
             if scenario not in VALID_SCENARIOS:

@@ -94,7 +94,9 @@ class Command(BaseCommand):
                 ret_recall     = len(overlap) / len(expected_pairs)
                 ret_hit        = bool(overlap)
             else:
-                ret_recall, ret_hit = 1.0, True
+                # out_of_scope: pass only if pipeline returned no sources
+                ret_hit    = len(returned_pairs) == 0
+                ret_recall = 1.0 if ret_hit else 0.0
 
             # ── Citation metrics ─────────────────────────────────────────────
             cited_maddes    = {

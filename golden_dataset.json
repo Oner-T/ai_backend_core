@@ -6,5 +6,143 @@
     "expected_sources": [
       {"document_name": "KVKK", "madde": 3}
     ]
+  },
+
+  {
+    "question": "Gazeteciler kişisel veri işlerken KVKK'dan muaf mıdır?",
+    "expected_answer": "",
+    "scenario": "definition",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 28}
+    ]
+  },
+  {
+    "question": "Ölmüş kişilerin verileri KVKK kapsamında mıdır?",
+    "expected_answer": "",
+    "scenario": "definition",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 2}
+    ]
+  },
+  {
+    "question": "Kamu kurumları veri sorumlusu olabilir mi?",
+    "expected_answer": "",
+    "scenario": "definition",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 3}
+    ]
+  },
+  {
+    "question": "Açık rıza her zaman gerekli midir, yoksa başka hukuki sebepler de var mıdır?",
+    "expected_answer": "",
+    "scenario": "definition",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 5}
+    ]
+  },
+
+  {
+    "question": "Veri ihlalini Kurul'a kaç gün içinde bildirmek zorunludur?",
+    "expected_answer": "",
+    "scenario": "procedural",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 12}
+    ]
+  },
+  {
+    "question": "İlgili kişinin başvurusuna kaç gün içinde cevap verilmelidir?",
+    "expected_answer": "",
+    "scenario": "procedural",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 13}
+    ]
+  },
+  {
+    "question": "Biyometrik veri işlenmesinde hangi şartlar aranmaktadır?",
+    "expected_answer": "",
+    "scenario": "procedural",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 6}
+    ]
+  },
+  {
+    "question": "Mobil uygulama kullanıcı verilerini üçüncü taraflarla paylaşabilir mi?",
+    "expected_answer": "",
+    "scenario": "procedural",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 8}
+    ]
+  },
+  {
+    "question": "Pazarlama amaçlı kişisel veri işlemek hangi hukuki şartlara tabidir?",
+    "expected_answer": "",
+    "scenario": "procedural",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 5}
+    ]
+  },
+
+  {
+    "question": "Yurt dışına veri aktarımında hem KVKK hem Aktarım Yönetmeliği ne der?",
+    "expected_answer": "",
+    "scenario": "cross_doc",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 9},
+      {"document_name": "Aktarım Yönetmeliği", "madde": 4}
+    ]
+  },
+  {
+    "question": "Veri sorumlusu aydınlatma yükümlülüğünü yerine getirmezse hangi yaptırımlar uygulanır?",
+    "expected_answer": "",
+    "scenario": "cross_doc",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 18},
+      {"document_name": "Aydınlatma Tebliği", "madde": 6}
+    ]
+  },
+  {
+    "question": "Kişisel verilerin silinmesi KVKK ve Silme Yönetmeliği'nde nasıl ele alınmaktadır?",
+    "expected_answer": "",
+    "scenario": "cross_doc",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 7},
+      {"document_name": "Silme Yönetmeliği", "madde": 7}
+    ]
+  },
+
+  {
+    "question": "KVKK Madde 28 hangi istisnaları düzenlemektedir?",
+    "expected_answer": "",
+    "scenario": "specific_madde",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 28}
+    ]
+  },
+  {
+    "question": "KVKK Madde 12 kapsamındaki veri güvenliği yükümlülükleri nelerdir?",
+    "expected_answer": "",
+    "scenario": "specific_madde",
+    "expected_sources": [
+      {"document_name": "KVKK", "madde": 12}
+    ]
+  },
+
+  {
+    "question": "KVKK ile GDPR arasındaki farklar nelerdir?",
+    "expected_answer": "",
+    "scenario": "out_of_scope",
+    "expected_sources": []
+  },
+  {
+    "question": "Kişisel veri ihlalinde tazminat davası nasıl açılır?",
+    "expected_answer": "",
+    "scenario": "out_of_scope",
+    "expected_sources": []
+  },
+  {
+    "question": "Türkiye'de e-ticaret vergisi nasıl hesaplanır?",
+    "expected_answer": "",
+    "scenario": "out_of_scope",
+    "expected_sources": []
   }
 ]

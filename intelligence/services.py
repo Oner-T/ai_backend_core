@@ -389,14 +389,14 @@ def query_kvkk(question: str, history: list | None = None) -> dict:
     if filters["bolum"] is not None:
         queryset = queryset.filter(section__number=filters["bolum"])
 
-    # 4. Retrieve: specific madde → all its chunks in order; general → vector top-8
+    # 4. Retrieve: specific madde → all its chunks in order; general → vector top-10
     if filters["madde"] is not None:
         similar_chunks = list(queryset.order_by('chunk_index'))
     else:
         similar_chunks = list(
             queryset
             .annotate(distance=CosineDistance('embedding', question_embedding))
-            .order_by('distance')[:8]
+            .order_by('distance')[:10]
         )
         retrieval_pipeline_traced(question, similar_chunks)
 
@@ -441,7 +441,9 @@ def query_kvkk(question: str, history: list | None = None) -> dict:
             "4. Aydınlatma Tebliği — Aydınlatma Yükümlülüğünün Yerine Getirilmesinde Uyulacak Usul ve Esaslar Hakkında Tebliğ\n"
             "5. VERBİS Yönetmeliği — Veri Sorumluları Sicili Hakkında Yönetmelik\n\n"
             "Answer strictly based on the provided context passages. "
-            "If the answer is not in the context, say so — do not speculate. "
+            "If the question is not related to Turkish personal data protection law or the documents listed above, "
+            "respond only with: 'Bu soru KVKK mevzuatı kapsamında değildir.' — do not answer it. "
+            "If the answer is not found in the context, say so — do not speculate. "
             "Always cite the document name and Madde number (e.g. 'KVKK Madde 6', 'Aktarım Yönetmeliği Madde 9'). "
             "Reply in the same language the user used. "
             "Use the conversation history for follow-up questions.\n\n"
