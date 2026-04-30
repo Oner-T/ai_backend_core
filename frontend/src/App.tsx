@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import type { KeyboardEvent, ReactNode } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { sendQuestion, sendFeedback, fetchSessions, fetchSessionMessages } from './api'
+import { sendQuestion, sendFeedback, fetchSessions, fetchSessionMessages, deleteSession } from './api'
 import { useAuth } from './AuthContext'
 import type { Message, Source, HistoryMessage, ChatSession, Regime } from './types'
 
@@ -116,6 +116,7 @@ export default function App() {
   const [ratings, setRatings]           = useState<Map<number, 'good' | 'bad'>>(new Map())
   const [sessionId, setSessionId]       = useState<number | null>(null)
   const [sidebarOpen, setSidebarOpen]   = useState(true)
+  const [deleteTarget, setDeleteTarget] = useState<ChatSession | null>(null)
 
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef  = useRef<HTMLTextAreaElement>(null)
@@ -140,6 +141,19 @@ export default function App() {
       setMessages((prev) => [...prev, { role: 'assistant', text: regime === 'eu' ? 'An error occurred. Please try again.' : 'Bir hata oluştu. Lütfen tekrar deneyin.', sources: [], regime }])
     },
   })
+
+  const deleteMutation = useMutation({
+    mutationFn: (sessionId: number) => deleteSession(sessionId),
+    onSuccess: (_, deletedId) => {
+      queryClient.invalidateQueries({ queryKey: ['sessions'] })
+      if (deletedId === sessionId) newConversation()
+      setDeleteTarget(null)
+    },
+  })
+
+  function confirmDelete() {
+    if (deleteTarget) deleteMutation.mutate(deleteTarget.id)
+  }
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -266,18 +280,31 @@ export default function App() {
             </p>
           )}
           {sessions.map((s) => (
-            <button
+            <div
               key={s.id}
-              onClick={() => loadSession(s)}
-              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer group ${
-                s.id === sessionId
-                  ? 'bg-slate-700 text-white'
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+              className={`flex items-center rounded-lg transition-colors group ${
+                s.id === sessionId ? 'bg-slate-700' : 'hover:bg-slate-800'
               }`}
             >
-              <p className="truncate text-xs font-medium leading-snug">{s.title || 'Conversation'}</p>
-              <p className="text-xs text-slate-500 mt-0.5">{formatDate(s.updated_at)}</p>
-            </button>
+              <button
+                onClick={() => loadSession(s)}
+                className="flex-1 text-left px-3 py-2 min-w-0 cursor-pointer"
+              >
+                <p className={`truncate text-xs font-medium leading-snug ${s.id === sessionId ? 'text-white' : 'text-slate-400 group-hover:text-white'}`}>
+                  {s.title || 'Conversation'}
+                </p>
+                <p className="text-xs text-slate-500 mt-0.5">{formatDate(s.updated_at)}</p>
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setDeleteTarget(s) }}
+                title="Delete conversation"
+                className="shrink-0 mr-1 p-1.5 rounded opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 hover:bg-slate-700 transition-all cursor-pointer"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+              </button>
+            </div>
           ))}
         </div>
 
@@ -485,6 +512,49 @@ export default function App() {
         </div>
 
       </div>
+
+      {/* ── Delete confirmation modal ──────────────────────────────────────── */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-sm mx-4 p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-slate-800">
+                  {regime === 'eu' ? 'Delete conversation?' : 'Konuşmayı sil?'}
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{deleteTarget.title || 'Conversation'}</p>
+              </div>
+            </div>
+            <p className="text-xs text-slate-500 mb-5">
+              {regime === 'eu'
+                ? 'This will permanently delete the conversation and all its messages. This action cannot be undone.'
+                : 'Bu konuşma ve tüm mesajları kalıcı olarak silinecek. Bu işlem geri alınamaz.'}
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="flex-1 rounded-lg border border-slate-200 text-slate-600 text-sm font-medium py-2 hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                {regime === 'eu' ? 'Cancel' : 'Vazgeç'}
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={deleteMutation.isPending}
+                className="flex-1 rounded-lg bg-red-500 text-white text-sm font-medium py-2 hover:bg-red-600 disabled:opacity-50 transition-colors cursor-pointer"
+              >
+                {deleteMutation.isPending
+                  ? (regime === 'eu' ? 'Deleting…' : 'Siliniyor…')
+                  : (regime === 'eu' ? 'Delete' : 'Sil')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

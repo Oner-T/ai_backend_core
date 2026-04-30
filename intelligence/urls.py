@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from intelligence.views import QueryView, FeedbackView
 from intelligence.auth_views import RegisterView, LoginView
-from intelligence.session_views import SessionListView, SessionMessagesView
+from intelligence.session_views import SessionListView, SessionMessagesView, SessionDeleteView
 
 urlpatterns = [
     # Auth
@@ -18,4 +18,5 @@ urlpatterns = [
     # Session history
     path('sessions/',                       SessionListView.as_view(),     name='sessions'),
     path('sessions/<int:session_id>/messages/', SessionMessagesView.as_view(), name='session_messages'),
+    path('sessions/<int:session_id>/',          SessionDeleteView.as_view(),   name='session_delete'),
 ]

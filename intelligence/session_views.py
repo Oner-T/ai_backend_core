@@ -21,3 +21,14 @@ class SessionMessagesView(APIView):
 
         messages = session.messages.values('role', 'content', 'sources', 'created_at')
         return Response(list(messages))
+
+
+class SessionDeleteView(APIView):
+    def delete(self, request, session_id):
+        try:
+            session = ChatSession.objects.get(id=session_id, user=request.user)
+        except ChatSession.DoesNotExist:
+            return Response({'error': 'Session not found.'}, status=404)
+
+        session.delete()
+        return Response(status=204)

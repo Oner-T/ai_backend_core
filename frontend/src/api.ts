@@ -125,3 +125,7 @@ export async function fetchSessionMessages(sessionId: number): Promise<ChatMessa
   const { data } = await api.get<ChatMessageRecord[]>(`/sessions/${sessionId}/messages/`)
   return data
 }
+
+export async function deleteSession(sessionId: number): Promise<void> {
+  await api.delete(`/sessions/${sessionId}/`)
+}
