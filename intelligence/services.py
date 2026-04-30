@@ -64,7 +64,6 @@ EU_DOCUMENTS = [
     {"file": "files/eu/OJ_L_202401689_EN_TXT.pdf",   "name": "EU AI Act",          "short": "AI Act"},
 ]
 
-DOCUMENTS = TR_DOCUMENTS  # backward-compat alias
 
 
 # ── Turkish parser helpers ───────────────────────────────────────────────────

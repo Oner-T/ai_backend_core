@@ -9,10 +9,10 @@ Three groups:
 
 import math
 import re
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
+from django.contrib.auth.models import User
 from django.test import TestCase
-from django.urls import reverse
 from rest_framework.test import APIClient
 
 from intelligence.models import GroundTruthEntry, UserFeedback
@@ -83,6 +83,8 @@ class QueryViewTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
+        self.user = User.objects.create_user(username="test@example.com", email="test@example.com", password="pass")
+        self.client.force_authenticate(user=self.user)
 
     @patch("intelligence.views.query_kvkk", return_value=MOCK_PIPELINE_RESPONSE)
     def test_valid_question_returns_200(self, _mock):
@@ -101,7 +103,7 @@ class QueryViewTests(TestCase):
     def test_history_is_passed_to_pipeline(self, mock_query):
         history = [{"role": "user", "content": "Merhaba"}]
         self.client.post("/api/query/", {"question": "Devam?", "history": history}, format="json")
-        mock_query.assert_called_once_with("Devam?", history=history)
+        mock_query.assert_called_once_with("Devam?", history=history, regime="tr")
 
     def test_missing_question_returns_400(self):
         res = self.client.post("/api/query/", {}, format="json")
@@ -119,7 +121,9 @@ class QueryViewTests(TestCase):
 class FeedbackViewTests(TestCase):
 
     def setUp(self):
-        self.client  = APIClient()
+        self.client = APIClient()
+        self.user = User.objects.create_user(username="feedback@example.com", email="feedback@example.com", password="pass")
+        self.client.force_authenticate(user=self.user)
         self.payload = {
             "question": "Kişisel veri nedir?",
             "answer":   "Gerçek kişiye ilişkin her türlü bilgi.",
