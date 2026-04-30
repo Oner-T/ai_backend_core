@@ -1,7 +1,10 @@
 import axios from 'axios'
 import type { QueryResponse, HistoryMessage, FeedbackPayload, AuthTokens, ChatSession, ChatMessageRecord, Regime } from './types'
 
-const api = axios.create({ baseURL: '/api' })
+// In dev: VITE_API_BASE_URL is unset → empty string → Vite proxy handles /api → localhost:8000
+// In prod: VITE_API_BASE_URL=https://yourapp.up.railway.app → full URL
+const _base = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '')
+const api = axios.create({ baseURL: `${_base}/api` })
 
 // ── Token helpers ─────────────────────────────────────────────────────────────
 
@@ -64,7 +67,7 @@ api.interceptors.response.use(
       }
 
       try {
-        const { data } = await axios.post('/api/auth/refresh/', { refresh })
+        const { data } = await axios.post(`${_base}/api/auth/refresh/`, { refresh })
         localStorage.setItem('access', data.access)
         if (data.refresh) localStorage.setItem('refresh', data.refresh)
         processQueue(null, data.access)

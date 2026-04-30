@@ -21,9 +21,8 @@ export default function AuthPage() {
         await register(email, password, password2)
       }
     } catch (err: unknown) {
-      const msg =
-        (err as { response?: { data?: { error?: string } } })?.response?.data?.error ??
-        'Bir hata oluştu. Lütfen tekrar deneyin.'
+      const raw = (err as { response?: { data?: { error?: unknown } } })?.response?.data?.error
+      const msg = typeof raw === 'string' ? raw : 'Bir hata oluştu. Lütfen tekrar deneyin.'
       setError(msg)
     } finally {
       setLoading(false)
