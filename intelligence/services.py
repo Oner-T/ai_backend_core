@@ -114,16 +114,21 @@ ROMAN_TO_INT = {
 }
 
 _EU_NOISE = re.compile(
-    r'^\d{1,2}\.\d{1,2}\.\d{4}\b'   # date "4.7.2016"
-    r'|^Official Journal'             # OJ header
-    r'|^L\s+\d'                      # "L 119" series marker
-    r'|^ELI:'                        # ELI URI
-    r'|^\d{4}/\d+$'                  # "2024/1689"
-    r'|^C\s+\d'                      # "C 123" series
+    r'^\d{1,2}\.\d{1,2}\.\d{4}\b'    # date "4.7.2016" or "12.7.2024"
+    r'|^Official Journal'              # OJ page header
+    r'|^L\s+\d'                       # "L 119" series marker
+    r'|^\d+/\d+\s+ELI:'              # "44/144 ELI: http://..."
+    r'|^ELI:'                         # bare ELI URI
+    r'|^\d{4}/\d+$'                   # "2024/1689"
+    r'|^C\s+\d'                       # "C 123" series
+    r'|^OJ\s+L,'                      # "OJ L, 12.7.2024"
+    r'|^HA\s*VE\s+ADOPTED'           # "HAVE ADOPTED THIS REGULATION:"
 )
 
-_EU_ARTICLE = re.compile(r'^Article\s+(\d{1,3})\s*$')
-_EU_CHAPTER = re.compile(r'^CHAPTER\s+([IVXLCDM]+)\s*$')
+# Both PDFs have OCR-split words: "Ar ticle" instead of "Article",
+# "C HAPTER" instead of "CHAPTER" — the regexes handle both forms.
+_EU_ARTICLE = re.compile(r'^Ar\s*ticle\s+(\d{1,3})\s*$')
+_EU_CHAPTER = re.compile(r'^C\s*HAPTER\s+([IVXLCDM]+)\s*$')
 _EU_SECTION = re.compile(r'^Section\s+\d+\s*$')
 _EU_ANNEX   = re.compile(r'^ANNEX\s*\w*\s*$')
 _EU_NUM_PARA = re.compile(r'^(\d+)\.\s')
