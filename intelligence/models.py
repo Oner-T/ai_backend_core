@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from pgvector.django import VectorField
 
@@ -8,13 +9,16 @@ class DocumentSection(models.Model):
         return str(self.number)
 
 class DocumentChunk(models.Model):
-    section = models.ForeignKey(DocumentSection, on_delete=models.CASCADE, related_name="chunks", null=True)
-    madde = models.IntegerField(null=True, blank=True)
-    madde_title = models.CharField(max_length=255, null=True, blank=True)
+    REGIME_CHOICES = [('tr', 'Turkish'), ('eu', 'European Union')]
+
+    section       = models.ForeignKey(DocumentSection, on_delete=models.CASCADE, related_name="chunks", null=True)
+    madde         = models.IntegerField(null=True, blank=True)
+    madde_title   = models.CharField(max_length=255, null=True, blank=True)
     document_name = models.CharField(max_length=255, default="KVKK.pdf")
-    chunk_index = models.IntegerField()
-    content = models.TextField()
-    embedding = VectorField(dimensions=1024, null=True, blank=True, help_text="The AI mathematical representation of the text")
+    chunk_index   = models.IntegerField()
+    content       = models.TextField()
+    embedding     = VectorField(dimensions=1024, null=True, blank=True, help_text="The AI mathematical representation of the text")
+    regime        = models.CharField(max_length=10, choices=REGIME_CHOICES, default='tr', db_index=True)
 
     def __str__(self):
         return f"{self.section.number if self.section else 'Genel'} - {self.madde} - Row {self.chunk_index}"
@@ -93,3 +97,32 @@ class EvaluationResult(models.Model):
 
     def __str__(self):
         return f"{'✅' if self.passed else '❌'} {self.entry.question[:60]}"
+
+
+class ChatSession(models.Model):
+    user       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='chat_sessions')
+    title      = models.CharField(max_length=120, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-updated_at']
+
+    def __str__(self):
+        return f"{self.user.email} — {self.title[:50]}"
+
+
+class ChatMessage(models.Model):
+    ROLE_CHOICES = [('user', 'User'), ('assistant', 'Assistant')]
+
+    session    = models.ForeignKey(ChatSession, on_delete=models.CASCADE, related_name='messages')
+    role       = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    content    = models.TextField()
+    sources    = models.JSONField(default=list)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"[{self.role}] {self.content[:60]}"

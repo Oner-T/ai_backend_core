@@ -36,3 +36,7 @@ venv/
 .env
 __pycache__/
 *.pyc
+
+# PDF source documents — large binaries, not needed on Railway
+*.pdf
+files/

@@ -1,0 +1,28 @@
+# ── Django core ───────────────────────────────────────────────────────────────
+Django==6.0.4
+gunicorn==25.3.0
+dj-database-url==3.1.2
+psycopg2-binary==2.9.11
+python-dotenv==1.2.2
+
+# ── REST / Auth ───────────────────────────────────────────────────────────────
+djangorestframework==3.17.1
+djangorestframework_simplejwt==5.5.1
+django-cors-headers==4.9.0
+
+# ── Vector DB ─────────────────────────────────────────────────────────────────
+pgvector==0.4.2
+
+# ── LangChain / Gemini ────────────────────────────────────────────────────────
+langchain==1.2.15
+langchain-core==1.2.31
+langchain-community==0.4.1
+langchain-google-genai==4.2.2
+langsmith==0.7.26
+
+# ── PDF parsing ───────────────────────────────────────────────────────────────
+pypdf==6.9.2
+
+# ── HuggingFace Inference API (production embeddings — no torch needed) ───────
+huggingface_hub==1.9.2
+numpy==2.4.4

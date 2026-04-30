@@ -6,16 +6,21 @@ export interface Source {
   content: string
 }
 
+export type Regime = 'tr' | 'eu'
+
 export interface QueryResponse {
   answer: string
   model: string
+  regime: Regime
   sources: Source[]
+  session_id: number
 }
 
 export interface Message {
   role: 'user' | 'assistant'
   text: string
   sources?: Source[]
+  regime?: Regime
 }
 
 export interface HistoryMessage {
@@ -29,4 +34,24 @@ export interface FeedbackPayload {
   sources: Source[]
   rating: 'good' | 'bad'
   comment?: string
+}
+
+export interface AuthTokens {
+  access: string
+  refresh: string
+  email: string
+}
+
+export interface ChatSession {
+  id: number
+  title: string
+  created_at: string
+  updated_at: string
+}
+
+export interface ChatMessageRecord {
+  role: 'user' | 'assistant'
+  content: string
+  sources: Source[]
+  created_at: string
 }
